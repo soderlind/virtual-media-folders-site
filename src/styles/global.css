@@ -10,6 +10,7 @@
   --accent-strong: #0073aa; /* heritage anchor from the icon */
   --accent-bright: #3b9ee5;
   --accent-contrast: #ffffff;
+  --accent-on-tint: #075e9e; /* accent text on a light accent tint (WCAG AA) */
 
   /* Neutrals (light) */
   --bg: #ffffff;
@@ -18,7 +19,7 @@
   --surface-border: #e3e9f2;
   --text: #0f172a;
   --text-muted: #4a5a72;
-  --text-faint: #6b7a90;
+  --text-faint: #5b6a80;
 
   /* Effects */
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06),
@@ -47,6 +48,7 @@
   --accent-strong: #4ea8de;
   --accent-bright: #7cc3ec;
   --accent-contrast: #06202f;
+  --accent-on-tint: #7cc3ec; /* lighter accent text on dark accent tint */
 
   --bg: #0b1220;
   --bg-subtle: #0f1a2b;
@@ -104,6 +106,12 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+/* In-paragraph links must not rely on color alone. */
+p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 h1,
@@ -265,7 +273,7 @@ p {
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   background: color-mix(in srgb, var(--accent) 12%, transparent);
-  color: var(--accent);
+  color: var(--accent-on-tint);
   border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
