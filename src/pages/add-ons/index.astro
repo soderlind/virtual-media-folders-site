@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AddonCard from '../../components/AddonCard.astro';
+import CTA from '../../components/CTA.astro';
+import { ADDONS, CATEGORIES } from '../../data/addons';
+import { LINKS, SITE } from '../../data/site';
+import { getSiteData } from '../../lib/data';
+import { buildPageGraph, canonicalOf } from '../../lib/schema';
+
+const data = await getSiteData();
+const byCategory = CATEGORIES.map((cat) => ({
+  ...cat,
+  addons: ADDONS.filter((a) => a.category === cat.id),
+}));
+
+const canonical = canonicalOf(Astro.url);
+const graph = buildPageGraph({
+  canonical,
+  name: 'Add-ons',
+  description:
+    'Nine free add-ons that extend Virtual Media Folders with AI, workflow, cleanup, migration, and search.',
+  webPageType: 'CollectionPage',
+  breadcrumbs: [
+    { name: 'Home', url: `${SITE.url}/` },
+    { name: 'Add-ons', url: canonical },
+  ],
+});
+---
+
+<BaseLayout
+  title="Add-ons"
+  description="Nine free add-ons that extend Virtual Media Folders with AI, workflow, cleanup, migration, and search — installed from the Add-On Manager."
+  graph={graph}
+>
+  <section class="section page-head">
+    <div class="container">
+      <span class="eyebrow">Add-ons</span>
+      <h1>Extend Virtual Media Folders.</h1>
+      <p class="lead">
+        The core plugin stays lightweight. These nine free add-ons add power only
+        where you need it — all installed and updated from the Add-On Manager.
+      </p>
+      <div class="head-cta">
+        <a class="btn btn--primary" href={LINKS.addonManager} rel="noopener">
+          Get the Add-On Manager
+        </a>
+        <a class="btn btn--ghost" href="/">← Back to overview</a>
+      </div>
+    </div>
+  </section>
+
+  {
+    byCategory.map((cat) => (
+      <section class="section cat">
+        <div class="container">
+          <div class="cat-head">
+            <h2>{cat.label}</h2>
+            <p>{cat.blurb}</p>
+          </div>
+          <div class="grid cat-grid">
+            {cat.addons.map((addon) => (
+              <AddonCard addon={addon} stars={data.addons[addon.repo]?.stars} />
+            ))}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <CTA
+    title="Start with the core. Add power later."
+    text="Install Virtual Media Folders first — then reach for add-ons as your library grows."
+  />
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-bottom: 0;
+  }
+  .head-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .cat {
+    padding-block: clamp(2rem, 1rem + 3vw, 3rem);
+  }
+  .cat-head {
+    margin-bottom: 1.5rem;
+  }
+  .cat-head h2 {
+    font-size: 1.5rem;
+  }
+  .cat-head p {
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+  .cat-grid {
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .cat-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 980px) {
+    .cat-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

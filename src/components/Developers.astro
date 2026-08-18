@@ -1,0 +1,143 @@
+---
+import { LINKS } from '../data/site';
+
+const cards = [
+  {
+    title: 'Hooks & filters',
+    body: 'Shape folder behavior with filters like vmfo_upload_folder and vmfo_can_delete_folder. Add-ons build on the same public API you do.',
+    link: { label: 'Development docs', href: LINKS.docsDevelopment },
+  },
+  {
+    title: 'REST API',
+    body: 'A clean vmfo/v1 namespace for folders, counts, and preferences — plus native /wp/v2/vmfo_folder for the block editor.',
+    link: { label: 'API reference', href: LINKS.docsDevelopment },
+  },
+  {
+    title: 'MCP & AI Abilities',
+    body: 'With the AI Ability add-on, agents get capability-gated tools to list, create, and fill folders through the WordPress Abilities API.',
+    link: { label: 'MCP guide', href: LINKS.docsMcp },
+  },
+];
+---
+
+<section id="developers" class="section section--subtle">
+  <div class="container dev-grid">
+    <div class="dev-copy">
+      <span class="eyebrow">For developers & AI</span>
+      <h2>Built on native WordPress. Extend it your way.</h2>
+      <p class="lead">
+        No proprietary tables, no lock-in — just a WordPress taxonomy with a
+        documented REST API, filters, and first-class support for AI agents.
+      </p>
+
+      <div class="dev-cards">
+        {
+          cards.map((c) => (
+            <article class="card dev-card">
+              <h3>{c.title}</h3>
+              <p>{c.body}</p>
+              <a href={c.link.href} rel="noopener">{c.link.label} →</a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+
+    <aside class="dev-code" aria-label="Example: assigning media to a folder via an AI ability">
+      <div class="code-head">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="code-title">vmfo/add-to-folder</span>
+      </div>
+      <pre><code>{`// Assign attachments to a folder via MCP
+POST /wp-json/mcp/mcp-adapter-default-server
+{
+  "method": "tools/call",
+  "params": {
+    "name": "mcp-adapter-execute-ability",
+    "arguments": {
+      "ability_name": "vmfo/add-to-folder",
+      "parameters": {
+        "folder_id": 2285,
+        "attachment_ids": [101, 205, 309]
+      }
+    }
+  }
+}`}</code></pre>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .dev-grid {
+    display: grid;
+    gap: clamp(2rem, 1rem + 3vw, 3rem);
+    align-items: start;
+  }
+  .dev-copy .lead {
+    margin: 0.75rem 0 2rem;
+  }
+  .dev-cards {
+    display: grid;
+    gap: 1rem;
+  }
+  .dev-card {
+    padding: 1.25rem 1.4rem;
+  }
+  .dev-card h3 {
+    margin-bottom: 0.35rem;
+  }
+  .dev-card p {
+    color: var(--text-muted);
+    margin-bottom: 0.6rem;
+  }
+  .dev-card a {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .dev-code {
+    background: #0b1220;
+    border: 1px solid #223148;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 84px;
+  }
+  .code-head {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 0.9rem;
+    background: #0f1a2b;
+    border-bottom: 1px solid #223148;
+  }
+  .code-head .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #33465f;
+  }
+  .code-title {
+    margin-left: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #8395ac;
+  }
+  .dev-code pre {
+    margin: 0;
+    padding: 1.1rem 1.25rem;
+    overflow-x: auto;
+  }
+  .dev-code code {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #cfe3f5;
+    white-space: pre;
+  }
+  @media (min-width: 900px) {
+    .dev-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+</style>

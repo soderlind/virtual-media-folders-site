@@ -1,0 +1,175 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+import { ADDONS } from '../../data/addons';
+import { LINKS, SITE } from '../../data/site';
+import { getSiteData } from '../../lib/data';
+import { buildPageGraph, canonicalOf, addonSoftwarePiece } from '../../lib/schema';
+
+export const getStaticPaths = (() => {
+  return ADDONS.map((addon) => ({
+    params: { slug: addon.slug },
+    props: { addon },
+  }));
+}) satisfies GetStaticPaths;
+
+const { addon } = Astro.props;
+const data = await getSiteData();
+const stats = data.addons[addon.repo];
+const repoUrl = `https://github.com/soderlind/${addon.repo}`;
+
+const canonical = canonicalOf(Astro.url);
+const graph = buildPageGraph({
+  canonical,
+  name: `${addon.name} add-on`,
+  description: addon.summary,
+  breadcrumbs: [
+    { name: 'Home', url: `${SITE.url}/` },
+    { name: 'Add-ons', url: `${SITE.url}/add-ons` },
+    { name: addon.name, url: canonical },
+  ],
+  pieces: (ids) => [addonSoftwarePiece(addon, stats, canonical, ids)],
+});
+---
+
+<BaseLayout title={`${addon.name} add-on`} description={addon.summary} graph={graph}>
+  <article class="section addon-detail">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a> / <a href="/add-ons/">Add-ons</a> /
+        <span aria-current="page">{addon.name}</span>
+      </nav>
+
+      <header class="detail-head">
+        <div class="detail-meta">
+          <span class="badge">{addon.category}</span>
+          {stats?.version && <span class="ver">{stats.version}</span>}
+          {typeof stats?.stars === 'number' && stats.stars > 0 && (
+            <span class="ver">★ {stats.stars}</span>
+          )}
+        </div>
+        <h1>{addon.name}</h1>
+        <p class="tagline">{addon.tagline}</p>
+        <div class="detail-cta">
+          <a class="btn btn--primary" href={LINKS.addonManager} rel="noopener">
+            Install via Add-On Manager
+          </a>
+          <a class="btn btn--secondary" href={repoUrl} rel="noopener">
+            View on GitHub
+          </a>
+        </div>
+      </header>
+
+      <div class="detail-body">
+        <div class="detail-main">
+          <p class="detail-desc">{addon.description}</p>
+          {
+            addon.requiresApiKey && (
+              <p class="detail-note">
+                This add-on needs an API key from a supported AI provider, or a
+                local LLM.
+              </p>
+            )
+          }
+        </div>
+        <aside class="detail-side">
+          <h2>Highlights</h2>
+          <ul>
+            {addon.features.map((f) => <li>{f}</li>)}
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </article>
+
+  <CTA
+    title="Add-ons build on the core plugin."
+    text="Install Virtual Media Folders, then add this from the Add-On Manager."
+  />
+</BaseLayout>
+
+<style>
+  .crumbs {
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    margin-bottom: 1.5rem;
+  }
+  .crumbs a {
+    color: var(--text-muted);
+  }
+  .detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .ver {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-faint);
+  }
+  .tagline {
+    font-size: 1.3rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 0.75rem;
+    max-width: 40rem;
+  }
+  .detail-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .detail-body {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--surface-border);
+  }
+  .detail-desc {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+  }
+  .detail-note {
+    margin-top: 1.25rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .detail-side h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 1rem;
+  }
+  .detail-side ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .detail-side li {
+    position: relative;
+    padding-left: 1.6rem;
+    color: var(--text-muted);
+  }
+  .detail-side li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  @media (min-width: 860px) {
+    .detail-body {
+      grid-template-columns: 1.5fr 1fr;
+    }
+  }
+</style>

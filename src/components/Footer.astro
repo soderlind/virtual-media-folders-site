@@ -1,0 +1,145 @@
+---
+import BrandMark from './BrandMark.astro';
+import { LINKS, SITE, REQUIREMENTS } from '../data/site';
+
+const year = new Date().getFullYear();
+
+const cols = [
+  {
+    title: 'Plugin',
+    links: [
+      { label: 'WordPress.org', href: LINKS.wporg },
+      { label: 'Download latest', href: LINKS.download },
+      { label: 'Try in Playground', href: LINKS.playground },
+      { label: 'Watch demo', href: LINKS.video },
+    ],
+  },
+  {
+    title: 'Developers',
+    links: [
+      { label: 'GitHub repository', href: LINKS.github },
+      { label: 'Development docs', href: LINKS.docsDevelopment },
+      { label: 'Add-on development', href: LINKS.docsAddon },
+      { label: 'Accessibility', href: LINKS.docsA11y },
+    ],
+  },
+  {
+    title: 'More',
+    links: [
+      { label: 'All add-ons', href: '/add-ons/' },
+      { label: 'Add-On Manager', href: LINKS.addonManager },
+      { label: 'Report an issue', href: LINKS.githubIssues },
+      { label: 'Sponsor', href: LINKS.sponsor },
+    ],
+  },
+];
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a class="brand" href="/" aria-label={`${SITE.name} home`}>
+        <BrandMark size={24} />
+        <span>Virtual Media Folders</span>
+      </a>
+      <p>{SITE.tagline}</p>
+      <p class="req">Requires WordPress {REQUIREMENTS.wordpress} · PHP {REQUIREMENTS.php}</p>
+    </div>
+
+    {
+      cols.map((col) => (
+        <nav class="footer-col" aria-label={col.title}>
+          <h2>{col.title}</h2>
+          <ul>
+            {col.links.map((l) => (
+              <li>
+                <a href={l.href} rel="noopener">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+  </div>
+
+  <div class="container footer-legal">
+    <p>
+      &copy; {year} {SITE.author}. Virtual Media Folders is free software under the
+      <a href="https://www.gnu.org/licenses/gpl-2.0.html" rel="noopener">GPL-2.0-or-later</a>.
+    </p>
+    <p class="privacy">This site sets no cookies and does not track you.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--bg-subtle);
+    border-top: 1px solid var(--surface-border);
+    padding-block: clamp(2.5rem, 1.5rem + 3vw, 4rem) 1.5rem;
+  }
+  .footer-inner {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+  }
+  .footer-brand .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .footer-brand .brand :global(svg) {
+    color: var(--accent);
+  }
+  .footer-brand p {
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+    max-width: 26rem;
+  }
+  .footer-brand .req {
+    font-size: 0.85rem;
+    color: var(--text-faint);
+  }
+  .footer-col h2 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    margin-bottom: 0.85rem;
+  }
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+  .footer-col a {
+    color: var(--text-muted);
+  }
+  .footer-col a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .footer-legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--surface-border);
+    font-size: 0.85rem;
+    color: var(--text-faint);
+  }
+  .footer-legal a {
+    color: var(--text-muted);
+  }
+  @media (min-width: 720px) {
+    .footer-inner {
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    }
+  }
+</style>

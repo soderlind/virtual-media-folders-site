@@ -1,0 +1,128 @@
+---
+import { LINKS } from '../data/site';
+import type { PluginStats } from '../lib/data';
+
+export interface Props {
+  stats: PluginStats;
+}
+const { stats } = Astro.props;
+
+const reviews = [
+  {
+    quote:
+      'Just a nice, lightweight organizational tool with no lock-in. It helps me, my clients, and doesn’t bloat up my sites. Win for everyone!',
+    author: 'Cleo3',
+    title: 'Useful, lightweight, and it just works!',
+  },
+  {
+    quote:
+      'A lightweight plugin that uses the WordPress internal API and the native taxonomy system, up-to-date and very lightweight. You can download it without worry.',
+    author: 'mzvvz',
+    title: 'Great plugin!',
+  },
+];
+
+const metrics = [
+  { value: `${stats.activeInstalls.toLocaleString('en-US')}+`, label: 'Active installs' },
+  { value: '5.0 ★', label: `${stats.numRatings} reviews, all 5-star` },
+  { value: '20 yrs', label: 'Media tooling, since ImageManager (2006)' },
+];
+---
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Loved by editors</span>
+      <h2>Lightweight by reputation, not just by claim.</h2>
+    </div>
+
+    <div class="metrics">
+      {
+        metrics.map((m) => (
+          <div class="metric">
+            <span class="metric-v">{m.value}</span>
+            <span class="metric-l">{m.label}</span>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="grid reviews">
+      {
+        reviews.map((r) => (
+          <figure class="card review">
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <blockquote>“{r.quote}”</blockquote>
+            <figcaption>— {r.author}, <span>{r.title}</span></figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <p class="reviews-link">
+      <a href={LINKS.wporgReviews} rel="noopener">Read all reviews on WordPress.org →</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .metrics {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .metric {
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .metric-v {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .metric-l {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  .reviews {
+    grid-template-columns: 1fr;
+  }
+  .review {
+    padding: 1.6rem;
+  }
+  .review .stars {
+    color: #f5a623;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+  .review blockquote {
+    margin: 0 0 1rem;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+  .review figcaption {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  .review figcaption span {
+    color: var(--text-faint);
+  }
+  .reviews-link {
+    margin-top: 1.75rem;
+    font-weight: 600;
+  }
+  @media (min-width: 700px) {
+    .metrics {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .reviews {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

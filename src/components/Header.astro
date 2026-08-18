@@ -1,0 +1,101 @@
+---
+import BrandMark from './BrandMark.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { LINKS, SITE } from '../data/site';
+
+const nav = [
+  { label: 'Features', href: '/#features' },
+  { label: 'Add-ons', href: '/add-ons/' },
+  { label: 'Developers', href: '/#developers' },
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label={`${SITE.name} home`}>
+      <BrandMark size={26} />
+      <span class="brand-name">Virtual Media Folders</span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary">
+      {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href={LINKS.github} rel="noopener">GitHub</a>
+    </nav>
+
+    <div class="header-actions">
+      <ThemeToggle />
+      <a class="btn btn--primary btn--sm" href={LINKS.wporg} rel="noopener">
+        Install
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--surface-border);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 64px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--text);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .brand:hover {
+    text-decoration: none;
+    color: var(--accent);
+  }
+  .brand :global(svg) {
+    color: var(--accent);
+    flex: none;
+  }
+  .primary-nav {
+    display: none;
+    margin-left: auto;
+    gap: 1.5rem;
+  }
+  .primary-nav a {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .primary-nav a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-left: auto;
+  }
+  .btn--sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  @media (min-width: 820px) {
+    .primary-nav {
+      display: flex;
+    }
+    .header-actions {
+      margin-left: 0;
+    }
+  }
+  @media (max-width: 460px) {
+    .brand-name {
+      display: none;
+    }
+  }
+</style>

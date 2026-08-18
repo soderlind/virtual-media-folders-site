@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import Seo from '@jdevalk/astro-seo-graph/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../data/site';
+import { canonicalOf, type SchemaPiece } from '../lib/schema';
+
+export interface Props {
+  title: string;
+  description?: string;
+  /** Path-only OG image or absolute URL; defaults to the site OG image. */
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  /** Connected schema.org @graph for this page (from buildPageGraph). */
+  graph?: SchemaPiece;
+  noindex?: boolean;
+  /** Suffix the <title> with the site name on interior pages. */
+  suffixTitle?: boolean;
+}
+
+const {
+  title,
+  description = SITE.description,
+  ogImage = SITE.ogImage,
+  ogType = 'website',
+  graph,
+  noindex = false,
+  suffixTitle = true,
+} = Astro.props;
+
+const canonical = canonicalOf(Astro.url);
+const ogImageUrl = new URL(ogImage, SITE.url).href;
+
+// Optional: set PUBLIC_CF_ANALYTICS_TOKEN to enable Cloudflare Web Analytics.
+const cfToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
+---
+
+<!doctype html>
+<html lang={SITE.locale} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={SITE.themeColor} />
+
+    <Seo
+      title={title}
+      titleTemplate={suffixTitle ? `%s — ${SITE.name}` : undefined}
+      description={description}
+      canonical={canonical}
+      ogType={ogType}
+      ogImage={ogImageUrl}
+      ogImageAlt={`${SITE.name} — ${SITE.tagline}`}
+      ogImageWidth={1200}
+      ogImageHeight={630}
+      siteName={SITE.name}
+      locale="en_US"
+      author={SITE.author}
+      noindex={noindex}
+      twitter={{ card: 'summary_large_image' }}
+      graph={graph ?? null}
+      extraLinks={[
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'sitemap', href: '/sitemap-index.xml' },
+      ]}
+    />
+
+    <!-- Set the theme before paint to avoid a flash. -->
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia(
+          '(prefers-color-scheme: dark)'
+        ).matches;
+        const theme = stored ?? (prefersDark ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+
+    {
+      cfToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${cfToken}"}`}
+        />
+      )
+    }
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

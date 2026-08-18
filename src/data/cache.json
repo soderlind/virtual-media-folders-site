@@ -1,0 +1,20 @@
+{
+  "plugin": {
+    "version": "2.1.4",
+    "activeInstalls": 200,
+    "rating": 100,
+    "numRatings": 2,
+    "downloaded": 0,
+    "stars": 24
+  },
+  "addons": {
+    "vmfa-ai-ability": { "stars": 0, "version": null },
+    "vmfa-ai-organizer": { "stars": 0, "version": null },
+    "vmfa-editorial-workflow": { "stars": 0, "version": null },
+    "vmfa-rules-engine": { "stars": 0, "version": null },
+    "vmfa-media-cleanup": { "stars": 0, "version": null },
+    "vmfa-migrate": { "stars": 0, "version": null },
+    "vmfa-folder-exporter": { "stars": 0, "version": null },
+    "vmfa-search": { "stars": 0, "version": null }
+  }
+}

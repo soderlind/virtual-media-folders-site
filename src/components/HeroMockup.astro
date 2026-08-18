@@ -1,0 +1,209 @@
+---
+/** Lightweight CSS mockup of the Media Library with the folder sidebar. */
+const folders = [
+  { name: 'All Media', count: 1284, icon: 'stack' },
+  { name: 'Brand', count: 96, active: true },
+  { name: 'Products', count: 412, children: true },
+  { name: '— Spring 2026', count: 88 },
+  { name: '— Archive', count: 210 },
+  { name: 'Blog', count: 342 },
+  { name: 'Team', count: 54 },
+];
+---
+
+<div class="mock" role="img" aria-label="The WordPress Media Library with a virtual folder sidebar; a media tile is being dragged into the Brand folder.">
+  <div class="mock-bar" aria-hidden="true">
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    <span class="mock-url">Media Library</span>
+  </div>
+  <div class="mock-body" aria-hidden="true">
+    <aside class="mock-side">
+      <div class="side-head">
+        <span class="side-title">Folders</span>
+        <span class="side-plus">+</span>
+      </div>
+      <ul class="side-list">
+        {
+          folders.map((f) => (
+            <li class:list={['folder', { active: f.active, child: f.name.startsWith('—') }]}>
+              <span class="f-ico"></span>
+              <span class="f-name">{f.name.replace('— ', '')}</span>
+              <span class="f-count">{f.count}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+    <div class="mock-grid">
+      <div class="tile drag"></div>
+      {Array.from({ length: 8 }).map(() => <div class="tile"></div>)}
+    </div>
+  </div>
+</div>
+
+<style>
+  .mock {
+    background: var(--bg-elevated);
+    border: 1px solid var(--surface-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    width: 100%;
+  }
+  .mock-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--surface-border);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--surface-border);
+  }
+  .mock-url {
+    margin-left: 0.6rem;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+  .mock-body {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    min-height: 300px;
+  }
+  .mock-side {
+    border-right: 1px solid var(--surface-border);
+    padding: 0.6rem;
+    background: var(--bg);
+  }
+  .side-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2rem 0.35rem 0.6rem;
+  }
+  .side-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .side-plus {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .side-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+  .folder {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.4rem;
+    border-radius: 7px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+  .folder.child {
+    padding-left: 1.1rem;
+    font-size: 0.74rem;
+  }
+  .folder.active {
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .f-ico {
+    width: 12px;
+    height: 10px;
+    border-radius: 2px;
+    border: 1.5px solid currentColor;
+    opacity: 0.75;
+    flex: none;
+  }
+  .f-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .f-count {
+    font-size: 0.68rem;
+    color: var(--text-faint);
+  }
+  .mock-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.55rem;
+    padding: 0.75rem;
+    align-content: start;
+  }
+  .tile {
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 22%, var(--bg-subtle)),
+      var(--bg-subtle)
+    );
+    border: 1px solid var(--surface-border);
+  }
+  .tile:nth-child(3n) {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent-bright) 24%, var(--bg-subtle)),
+      var(--bg-subtle)
+    );
+  }
+  .tile.drag {
+    position: relative;
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent);
+    animation: dragToFolder 5s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  @keyframes dragToFolder {
+    0%,
+    12% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    45% {
+      transform: translate(-60%, -120%) scale(0.5) rotate(-4deg);
+      opacity: 0.95;
+    }
+    60% {
+      transform: translate(-160%, -150%) scale(0.28) rotate(-6deg);
+      opacity: 0;
+    }
+    61%,
+    100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile.drag {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .mock-body {
+      grid-template-columns: 120px 1fr;
+    }
+    .mock-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

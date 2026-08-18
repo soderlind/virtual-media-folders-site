@@ -1,0 +1,53 @@
+---
+import { LINKS } from '../data/site';
+
+export interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = 'Give your Media Library the structure it deserves.',
+  text = 'Free, open source, and installable in under a minute. No account, no tracking, no lock-in.',
+} = Astro.props;
+---
+
+<section class="section cta-section">
+  <div class="container cta">
+    <h2>{title}</h2>
+    <p>{text}</p>
+    <div class="cta-btns">
+      <a class="btn btn--primary" href={LINKS.wporg} rel="noopener">
+        Install from WordPress.org
+      </a>
+      <a class="btn btn--secondary" href={LINKS.playground} rel="noopener" target="_blank">
+        Try live in Playground
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 14%, var(--bg)),
+      var(--bg)
+    );
+  }
+  .cta {
+    text-align: center;
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+  .cta p {
+    margin: 0.9rem 0 1.75rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+  }
+  .cta-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+</style>

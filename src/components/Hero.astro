@@ -1,0 +1,95 @@
+---
+import HeroMockup from './HeroMockup.astro';
+import { LINKS } from '../data/site';
+import type { PluginStats } from '../lib/data';
+
+export interface Props {
+  stats: PluginStats;
+}
+const { stats } = Astro.props;
+const installs = `${stats.activeInstalls.toLocaleString('en-US')}+`;
+const stars = stats.stars.toLocaleString('en-US');
+---
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="badge">v{stats.version} · WordPress 6.8+ · PHP 8.3+</span>
+      <h1>Your Media Library, finally organized.</h1>
+      <p class="lead">
+        Virtual Media Folders adds hierarchical folders to the WordPress Media
+        Library — without moving a single file. Folders are virtual, so your URLs
+        never change. Lightweight, accessible, no lock-in.
+      </p>
+
+      <div class="hero-cta">
+        <a class="btn btn--primary" href={LINKS.wporg} rel="noopener">
+          Install from WordPress.org
+        </a>
+        <a class="btn btn--secondary" href={LINKS.playground} rel="noopener" target="_blank">
+          Try live in Playground
+        </a>
+        <a class="btn btn--ghost" href={LINKS.video} rel="noopener" target="_blank">
+          ▶ Watch demo
+        </a>
+      </div>
+
+      <ul class="hero-proof">
+        <li><strong>{installs}</strong> active installs</li>
+        <li><strong>★ 5.0</strong> on WordPress.org</li>
+        <li><strong>{stars}</strong> GitHub stars</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual">
+      <HeroMockup />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(2.5rem, 1rem + 6vw, 5.5rem);
+    background: radial-gradient(
+        1200px 600px at 80% -10%,
+        color-mix(in srgb, var(--accent) 12%, transparent),
+        transparent 60%
+      ),
+      var(--bg);
+  }
+  .hero-grid {
+    display: grid;
+    gap: clamp(2rem, 1rem + 4vw, 3.5rem);
+    align-items: center;
+  }
+  .hero-copy .badge {
+    margin-bottom: 1.1rem;
+  }
+  .hero-copy h1 {
+    margin-bottom: 1rem;
+  }
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .hero-proof {
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .hero-proof strong {
+    color: var(--text);
+  }
+  @media (min-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1.05fr 1fr;
+    }
+  }
+</style>

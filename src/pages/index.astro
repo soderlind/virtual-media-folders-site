@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Problem from '../components/Problem.astro';
+import Features from '../components/Features.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import AddonsSection from '../components/AddonsSection.astro';
+import Developers from '../components/Developers.astro';
+import SocialProof from '../components/SocialProof.astro';
+import CTA from '../components/CTA.astro';
+import { getSiteData } from '../lib/data';
+import { buildPageGraph, canonicalOf, pluginSoftwarePiece } from '../lib/schema';
+import { SITE } from '../data/site';
+
+const data = await getSiteData();
+const canonical = canonicalOf(Astro.url);
+const graph = buildPageGraph({
+  canonical,
+  name: SITE.name,
+  description: SITE.description,
+  pieces: (ids) => [pluginSoftwarePiece(data.plugin, ids)],
+});
+---
+
+<BaseLayout
+  title={`${SITE.name} — Media Library folders for WordPress`}
+  suffixTitle={false}
+  graph={graph}
+>
+  <Hero stats={data.plugin} />
+  <Problem />
+  <Features />
+  <HowItWorks />
+  <AddonsSection data={data} compact />
+  <Developers />
+  <SocialProof stats={data.plugin} />
+  <CTA />
+</BaseLayout>

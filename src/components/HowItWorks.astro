@@ -1,0 +1,77 @@
+---
+const steps = [
+  {
+    n: '01',
+    title: 'Folders are virtual',
+    body: 'Built on a native WordPress taxonomy — assigning media to a folder is just a term relationship, not a file move.',
+  },
+  {
+    n: '02',
+    title: 'Files never move on disk',
+    body: 'Your uploads stay exactly where they are, so every media URL keeps working. Reorganize as much as you like.',
+  },
+  {
+    n: '03',
+    title: 'Nest without limits',
+    body: 'Create folders inside folders to mirror how your team actually thinks about content — brands, projects, campaigns.',
+  },
+];
+---
+
+<section class="section section--subtle">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">How it works</span>
+      <h2>Reorganize freely. Break nothing.</h2>
+      <p>
+        The trick is that folders are metadata, not directories. That one design
+        choice is why URLs never change.
+      </p>
+    </div>
+
+    <ol class="steps">
+      {
+        steps.map((s) => (
+          <li class="card step">
+            <span class="step-n">{s.n}</span>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+    counter-reset: none;
+  }
+  .step {
+    padding: 1.6rem;
+  }
+  .step-n {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .step h3 {
+    margin: 0.6rem 0 0.4rem;
+  }
+  .step p {
+    color: var(--text-muted);
+  }
+  @media (min-width: 800px) {
+    .steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+import AddonCard from './AddonCard.astro';
+import { ADDONS } from '../data/addons';
+import { LINKS } from '../data/site';
+import type { SiteData } from '../lib/data';
+
+export interface Props {
+  data: SiteData;
+  /** Show only a preview + link on the landing page. */
+  compact?: boolean;
+}
+const { data, compact = false } = Astro.props;
+const shown = ADDONS;
+---
+
+<section id="add-ons" class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Add-ons</span>
+      <h2>Extend it, only when you need to.</h2>
+      <p>
+        The core plugin stays lean. Nine free add-ons — installed and managed
+        from the <a href={LINKS.addonManager} rel="noopener">Add-On Manager</a> —
+        add AI, workflow, cleanup, migration, and search when your library grows.
+      </p>
+    </div>
+
+    <div class="grid addons-grid">
+      {shown.map((addon) => <AddonCard addon={addon} stars={data.addons[addon.repo]?.stars} />)}
+    </div>
+
+    {
+      compact && (
+        <div class="addons-more">
+          <a class="btn btn--secondary" href="/add-ons/">
+            Explore all add-ons
+          </a>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .addons-grid {
+    grid-template-columns: 1fr;
+  }
+  .addons-more {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  @media (min-width: 640px) {
+    .addons-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 980px) {
+    .addons-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

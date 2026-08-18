@@ -1,0 +1,86 @@
+---
+import type { Addon } from '../data/addons';
+
+export interface Props {
+  addon: Addon;
+  stars?: number;
+}
+const { addon, stars } = Astro.props;
+const repoUrl = `https://github.com/soderlind/${addon.repo}`;
+---
+
+<article class="card addon">
+  <div class="addon-top">
+    <span class="badge">{addon.category}</span>
+    {
+      typeof stars === 'number' && stars > 0 && (
+        <span class="stars" title={`${stars} GitHub stars`}>★ {stars}</span>
+      )
+    }
+  </div>
+  <h3>
+    <a href={`/add-ons/${addon.slug}/`}>{addon.name}</a>
+  </h3>
+  <p class="addon-tag">{addon.tagline}</p>
+  <p class="addon-sum">{addon.summary}</p>
+  {addon.requiresApiKey && <p class="addon-note">Needs an API key or local LLM</p>}
+  <div class="addon-links">
+    <a href={`/add-ons/${addon.slug}/`}>Details →</a>
+    <a href={repoUrl} rel="noopener">GitHub</a>
+  </div>
+</article>
+
+<style>
+  .addon {
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .addon-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .stars {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-faint);
+  }
+  .addon h3 {
+    margin-bottom: 0.35rem;
+  }
+  .addon h3 a {
+    color: var(--text);
+  }
+  .addon h3 a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .addon-tag {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 0.5rem;
+  }
+  .addon-sum {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    flex: 1;
+  }
+  .addon-note {
+    margin-top: 0.75rem;
+    font-size: 0.78rem;
+    color: var(--text-faint);
+  }
+  .addon-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--surface-border);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+</style>

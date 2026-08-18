@@ -1,0 +1,71 @@
+---
+const pains = [
+  'Thousands of files in one endless scroll.',
+  'No way to group images by project, brand, or campaign.',
+  'Other folder plugins move files and break your URLs.',
+  'Heavy “media manager” plugins that feel like a second CMS.',
+];
+---
+
+<section class="section section--subtle">
+  <div class="container problem">
+    <div class="section-head">
+      <span class="eyebrow">The problem</span>
+      <h2>The WordPress Media Library gets messy — fast.</h2>
+      <p>
+        Every upload lands in one flat pile. On a site that’s been around for
+        years, finding the right image becomes a scroll-and-squint exercise.
+      </p>
+    </div>
+    <ul class="pain-list">
+      {
+        pains.map((p) => (
+          <li>
+            <span class="x" aria-hidden="true">×</span>
+            {p}
+          </li>
+        ))
+      }
+    </ul>
+    <p class="answer">
+      Virtual Media Folders fixes this with real folders that don’t touch your
+      files.
+    </p>
+  </div>
+</section>
+
+<style>
+  .pain-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
+    max-width: 44rem;
+  }
+  .pain-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+  .x {
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: color-mix(in srgb, #e5484d 16%, transparent);
+    color: #e5484d;
+    font-weight: 700;
+    flex: none;
+    margin-top: 2px;
+  }
+  .answer {
+    margin-top: 1.75rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    max-width: 40rem;
+  }
+</style>

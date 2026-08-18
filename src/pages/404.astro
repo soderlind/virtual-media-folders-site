@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FuzzyRedirect from '@jdevalk/astro-seo-graph/FuzzyRedirect.astro';
+---
+
+<BaseLayout title="Page not found" description="The page you were looking for could not be found. Head back to Virtual Media Folders and get your WordPress Media Library organized." noindex>
+  <section class="section notfound">
+    <div class="container">
+      <span class="eyebrow">404</span>
+      <h1>This folder is empty.</h1>
+      <p class="lead">The page you’re looking for doesn’t exist — but your media doesn’t have to be a mess.</p>
+      <p class="nf-suggest"><FuzzyRedirect suggestionText="Did you mean" /></p>
+      <div class="nf-cta">
+        <a class="btn btn--primary" href="/">Back to home</a>
+        <a class="btn btn--secondary" href="/add-ons/">Browse add-ons</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    text-align: center;
+    padding-block: clamp(4rem, 2rem + 8vw, 8rem);
+  }
+  .notfound .lead {
+    max-width: 34rem;
+    margin: 1rem auto 2rem;
+  }
+  .nf-suggest {
+    min-height: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .nf-cta {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>
