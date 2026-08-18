@@ -83,7 +83,9 @@ const cfToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
       cfToken && (
         <script
           is:inline
-          set:html={`addEventListener('load',function(){var r=function(){var s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.setAttribute('data-cf-beacon','{"token":"${cfToken}"}');document.head.appendChild(s)};'requestIdleCallback'in window?requestIdleCallback(r):setTimeout(r,0)});`}
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${cfToken}"}`}
         />
       )
     }
