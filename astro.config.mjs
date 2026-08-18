@@ -5,16 +5,19 @@ import seoGraph, { indexNowOnBranch } from '@jdevalk/astro-seo-graph/integration
 const SITE_URL = 'https://vmf.soderlind.no';
 const HOST = 'vmf.soderlind.no';
 
-// IndexNow only runs on the production branch, and only once a key is configured.
-// Ship the key route + deployed /<key>.txt first (see README), then set INDEXNOW_KEY.
-const indexNow = process.env.INDEXNOW_KEY
-  ? indexNowOnBranch(process.env.CF_PAGES_BRANCH ?? '', {
-      key: process.env.INDEXNOW_KEY,
-      host: HOST,
-      siteUrl: SITE_URL,
-      incremental: true,
-    })
-  : undefined;
+// IndexNow submits only when a key is set AND INDEXNOW_SUBMIT=true, on the
+// production branch. Publish the key file first (deploy once with the key set but
+// submission off), confirm /<key>.txt loads, then set INDEXNOW_SUBMIT — otherwise
+// the first run can't verify the key and Cloudflare/Bing flag it invalid.
+const indexNow =
+  process.env.INDEXNOW_KEY && process.env.INDEXNOW_SUBMIT === 'true'
+    ? indexNowOnBranch(process.env.CF_PAGES_BRANCH ?? '', {
+        key: process.env.INDEXNOW_KEY,
+        host: HOST,
+        siteUrl: SITE_URL,
+        incremental: true,
+      })
+    : undefined;
 
 // https://astro.build
 export default defineConfig({
