@@ -41,6 +41,7 @@ export default defineConfig({
     }),
   ],
   build: {
-    inlineStylesheets: 'auto',
+    // Inline all CSS so the small stylesheet isn't a render-blocking request.
+    inlineStylesheets: 'always',
   },
 });
