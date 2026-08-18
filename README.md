@@ -68,26 +68,36 @@ npx --yes sharp-cli -i public/og-default.svg -o public/og-default.png resize 120
 npx --yes sharp-cli -i public/favicon.svg -o public/apple-touch-icon.png resize 180 180
 ```
 
-## Deploy — Cloudflare Pages
+## Deploy — Cloudflare Pages (GitHub Actions + Wrangler)
 
-1. Push this repo to `github.com/soderlind/virtual-media-folders-site`.
-2. Cloudflare Pages → **Create project** → connect the repo.
-   - Build command: `npm run build`
-   - Output directory: `dist`
-3. Add the custom domain **vmf.soderlind.no** (DNS is already on Cloudflare — one click).
-4. **Analytics:** enable Cloudflare Web Analytics and set the site env var `PUBLIC_CF_ANALYTICS_TOKEN` to the beacon token to activate it.
+Deployment is defined in-repo: [.github/workflows/deploy.yml](.github/workflows/deploy.yml) builds and runs `wrangler pages deploy dist` on every push to `main`, on pull requests (preview deploys), and on a **daily cron** that refreshes the build-time data. Project config lives in [wrangler.jsonc](wrangler.jsonc).
 
-### Scheduled rebuilds (keep data fresh)
+### One-time setup
 
-Create a **Deploy Hook** in the Pages project, then trigger it on a schedule with a Cloudflare Worker Cron Trigger (e.g. daily) so the build re-fetches stars/version/add-on data:
+1. **Authenticate Wrangler locally and create the project** (opens your browser):
 
-```js
-export default {
-  async scheduled(_event, env) {
-    await fetch(env.DEPLOY_HOOK_URL, { method: 'POST' });
-  },
-};
-```
+   ```sh
+   npx wrangler login
+   npm run build
+   npx wrangler pages project create virtual-media-folders-site --production-branch=main
+   npx wrangler pages deploy dist --project-name=virtual-media-folders-site --branch=main
+   ```
+
+   The first deploy prints the live `*.pages.dev` URL.
+
+2. **Attach the custom domain** — Cloudflare dashboard → Pages → the project → **Custom domains** → add `vmf.soderlind.no` (one click; DNS is already on Cloudflare).
+
+3. **Add repo secrets** (GitHub → repo → Settings → Secrets and variables → Actions) so CI can deploy:
+   - `CLOUDFLARE_API_TOKEN` — create at dash.cloudflare.com → My Profile → API Tokens → **Create Token** → *Cloudflare Pages: Edit* template.
+   - `CLOUDFLARE_ACCOUNT_ID` — from any zone's overview, or `npx wrangler whoami`.
+   - `PUBLIC_CF_ANALYTICS_TOKEN` *(optional)* — Cloudflare Web Analytics beacon token, to activate cookieless analytics.
+   - `INDEXNOW_KEY` *(optional)* — see below.
+
+After the secrets exist, pushing to `main` deploys automatically and the daily cron keeps the data fresh.
+
+### IndexNow (optional)
+
+See "IndexNow (optional)" above: add the key route, deploy so `https://vmf.soderlind.no/<key>.txt` is reachable, then set the `INDEXNOW_KEY` secret. Submission runs only on the `main` branch and only submits changed URLs.
 
 ## License
 

@@ -4,7 +4,7 @@ Dynamic figures (plugin version, GitHub star count, add-on list/metadata) are fe
 
 ## Context
 
-Marketing copy is hand-authored, but numbers and the add-on roster should never go stale. Fetching at runtime would add client JS, latency, and CORS/rate-limit exposure, undermining the "lightweight" goal. Scheduled Cloudflare rebuilds (see ADR-0002) keep the baked data current.
+Marketing copy is hand-authored, but numbers and the add-on roster should never go stale. Fetching at runtime would add client JS, latency, and CORS/rate-limit exposure, undermining the "lightweight" goal. A daily scheduled CI rebuild (see ADR-0002) keeps the baked data current.
 
 ## Consequences
 
